@@ -1,0 +1,15 @@
+.timer {
+  align-items: center;
+  display: flex;
+}
+
+.timer input {
+  width: 3em;
+  font-size: 2em;
+  text-align: center;
+}
+
+.timer button {
+  width: 3rem;
+  font-weight: bolder;
+}
