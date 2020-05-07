@@ -8,6 +8,13 @@ html {
   font-size: 14px;
 }
 
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #2f3437;
+    color: #ebebeb;
+  }
+}
+
 @media (min-width: 375px) {
   html {
     font-size: 18px;
