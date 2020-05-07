@@ -64,6 +64,20 @@ export default function Timer() {
   const [time, setTime] = useStoredState(timerId, 0);
   const [counting, toggle] = useTimer(() => setTime((t) => t + 1));
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === " ") {
+        toggle();
+      } else {
+        return;
+      }
+
+      e.preventDefault();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [toggle]);
+
   return (
     <div className={style.timer}>
       <Input time={time} setTime={setTime} />
