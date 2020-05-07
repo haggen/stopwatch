@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export function useTimer(callback) {
+export function useStopwatch(callback) {
   const [state, setState] = useState(false);
   const callbackRef = useRef(callback);
 
@@ -20,5 +20,5 @@ export function useTimer(callback) {
     };
   }, [state]);
 
-  return [state, () => setState(state => !state)];
+  return [state, () => setState((state) => !state)];
 }

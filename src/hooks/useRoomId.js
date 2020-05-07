@@ -10,7 +10,7 @@ function uniqueId() {
   return hashids.encode(Date.now() - 1588812376880);
 }
 
-export function useRoomId(root = "/") {
+export function useUrlId(root = "/") {
   const roomId =
     window.location.pathname === root
       ? uniqueId()

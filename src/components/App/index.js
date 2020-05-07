@@ -1,7 +1,7 @@
 import React from "react";
 
-import Timer from "../Timer";
+import Stopwatch from "../Stopwatch";
 
 export default function App() {
-  return <Timer />;
+  return <Stopwatch />;
 }

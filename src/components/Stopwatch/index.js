@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 
-import { useTimer } from "../../hooks/useTimer";
+import { useStopwatch } from "../../hooks/useStopwatch";
 import { useStoredState } from "../../hooks/useStoredState";
-import { useRoomId } from "../../hooks/useRoomId";
+import { useUrlId } from "../../hooks/useRoomId";
 
 import style from "./index.module.css";
 
@@ -59,10 +59,10 @@ function Input({ time, setTime }) {
   );
 }
 
-export default function Timer() {
-  const timerId = useRoomId();
-  const [time, setTime] = useStoredState(timerId, 0);
-  const [counting, toggle] = useTimer(() => setTime((t) => t + 1));
+export default function Stopwatch() {
+  const stopwatchId = useUrlId();
+  const [time, setTime] = useStoredState(stopwatchId, 0);
+  const [counting, toggle] = useStopwatch(() => setTime((t) => t + 1));
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -79,7 +79,7 @@ export default function Timer() {
   }, [toggle]);
 
   return (
-    <div className={style.timer}>
+    <div className={style.stopwatch}>
       <Input time={time} setTime={setTime} />
       <button style={{ width: "4ch" }} onClick={() => toggle()}>
         {counting ? "Stop" : "Play"}
