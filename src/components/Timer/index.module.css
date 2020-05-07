@@ -6,7 +6,8 @@
 
 .timer input {
   font-size: 3em;
-  font-family: monospace;
+  font-family: "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace",
+    "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace;
   text-align: right;
   width: 5.25em;
 }

@@ -15,13 +15,13 @@ html {
   }
 }
 
-@media (min-width: 375px) {
+@media (min-width: 512px) {
   html {
-    font-size: 18px;
+    font-size: 22px;
   }
 }
 
-@media (min-width: 512px) {
+@media (min-width: 768px) {
   html {
     font-size: 28px;
   }
