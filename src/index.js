@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
 import "resetize";
-import "./global.css";
+import "./style/global.css";
 
-import Timer from "./components/Timer";
+import App from "./components/App";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Timer />
-  </React.StrictMode>,
+  <React.StrictMode children={<App />} />,
   document.getElementById("root")
 );

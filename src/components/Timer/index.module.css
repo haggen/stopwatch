@@ -1,15 +1,17 @@
 .timer {
-  align-items: center;
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.75rem;
 }
 
 .timer input {
-  width: 3em;
-  font-size: 2em;
-  text-align: center;
+  font-size: 2.5em;
+  font-family: monospace;
+  text-align: right;
+  width: 5.25em;
 }
 
 .timer button {
-  width: 3rem;
   font-weight: bolder;
+  width: 4.5ch;
 }

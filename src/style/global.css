@@ -1,0 +1,46 @@
+html,
+body {
+  height: 100%;
+}
+
+html {
+  color: #37352f;
+  font-size: 14px;
+}
+
+@media (min-width: 375px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 512px) {
+  html {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 42px;
+  }
+}
+
+@media (min-width: 1440px) {
+  html {
+    font-size: 54px;
+  }
+}
+
+#root {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
