@@ -48,7 +48,12 @@ export default function Timer() {
   return (
     <div className={style.timer}>
       <Input time={time} setTime={setTime} />
-      <button onClick={(e) => toggle()}>{counting ? "Stop" : "Play"}</button>
+      <button style={{ width: "4ch" }} onClick={() => toggle()}>
+        {counting ? "Stop" : "Play"}
+      </button>
+      <button style={{ width: "5h" }} onClick={() => setTime(0)}>
+        Clear
+      </button>
     </div>
   );
 }

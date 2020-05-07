@@ -5,7 +5,7 @@
 }
 
 .timer input {
-  font-size: 2.5em;
+  font-size: 3em;
   font-family: monospace;
   text-align: right;
   width: 5.25em;
@@ -13,5 +13,4 @@
 
 .timer button {
   font-weight: bolder;
-  width: 4.5ch;
 }
