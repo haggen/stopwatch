@@ -6,7 +6,7 @@ const hashids = new Hashids();
 
 function uniqueId() {
   // This magic number is simply the value of Date.now() when I wrote this.
-  // It's meant to reduce the length of the hashid generated.
+  // It's meant to reduce the length of the generated hashid.
   return hashids.encode(Date.now() - 1588812376880);
 }
 
@@ -17,7 +17,7 @@ export function useUrlId(root = "/") {
       : window.location.pathname.substring(root.length);
 
   useEffect(() => {
-    window.history.pushState({}, null, root + roomId);
+    window.history.replaceState({}, null, root + roomId);
   }, [root, roomId]);
 
   return roomId;
