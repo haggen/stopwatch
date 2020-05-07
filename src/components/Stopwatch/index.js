@@ -17,9 +17,9 @@ function Input({ time, setTime }) {
 
   const value =
     (time > 3600
-      ? String((time / 3600).toFixed()).padStart(2, "0") + ":"
+      ? String(Math.floor(time / 3600)).padStart(2, "0") + ":"
       : "") +
-    String(((time % 3600) / 60).toFixed()).padStart(2, "0") +
+    String(Math.floor((time % 3600) / 60)).padStart(2, "0") +
     ":" +
     String(time % 60).padStart(2, "0");
 
