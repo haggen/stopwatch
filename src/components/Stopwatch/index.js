@@ -65,11 +65,11 @@ export default function Stopwatch() {
   const [state, setState] = useStoredState(stopwatchId, initialState);
   const [elapsed, setElapsed] = useState(state.elapsed);
 
-  const updateElapsed = () => {
+  const updateElapsed = useCallback(() => {
     setElapsed(
       state.elapsed + (state.playing ? Date.now() - state.changed : 0)
     );
-  };
+  }, [state, setElapsed]);
 
   const changeElapsedBy = (delta) => {
     setState((state) => ({
@@ -102,7 +102,7 @@ export default function Stopwatch() {
 
   useEffect(() => {
     updateElapsed();
-  }, [state]);
+  }, [state, updateElapsed]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
