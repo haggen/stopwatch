@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 
 import { useInterval } from "../../hooks/useInterval";
 import { useStoredState } from "../../hooks/useStoredState";
@@ -29,7 +29,7 @@ function Input({ elapsed, changeElapsedBy }) {
     } else if (e.key === "ArrowUp") {
       changeElapsedBy(60);
     } else if (e.key === "ArrowDown") {
-      changeElapsedBy(elapsed > 60 ? -60 : 0);
+      changeElapsedBy(elapsed > 60 ? -60 : -elapsed);
     } else {
       return;
     }
@@ -57,32 +57,52 @@ function Input({ elapsed, changeElapsedBy }) {
 const initialState = {
   playing: false,
   elapsed: 0,
+  changed: 0,
 };
 
 export default function Stopwatch() {
   const stopwatchId = useUrlId();
   const [state, setState] = useStoredState(stopwatchId, initialState);
+  const [elapsed, setElapsed] = useState(state.elapsed);
 
-  const changeElapsedBy = (delta) => {
-    setState((state) => ({ ...state, elapsed: state.elapsed + delta }));
+  const updateElapsed = () => {
+    setElapsed(
+      state.elapsed + (state.playing ? Date.now() - state.changed : 0)
+    );
   };
 
-  const resetElapsed = () => {
-    setState((state) => ({ ...state, elapsed: 0 }));
+  const changeElapsedBy = (delta) => {
+    setState((state) => ({
+      ...state,
+      elapsed: state.elapsed + delta,
+    }));
+  };
+
+  const reset = () => {
+    setState((state) => ({
+      ...state,
+      elapsed: 0,
+      changed: Date.now(),
+    }));
   };
 
   const toggle = useCallback(() => {
     setState((state) => ({
-      ...state,
       playing: !state.playing,
+      elapsed,
+      changed: Date.now(),
     }));
-  }, [setState]);
+  }, [elapsed, setState]);
 
   useInterval(() => {
     if (state.playing) {
-      changeElapsedBy(1);
+      updateElapsed();
     }
   }, 1000);
+
+  useEffect(() => {
+    updateElapsed();
+  }, [state]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -100,11 +120,14 @@ export default function Stopwatch() {
 
   return (
     <div className={style.stopwatch}>
-      <Input elapsed={state.elapsed} changeElapsedBy={changeElapsedBy} />
+      <Input
+        elapsed={Math.floor(elapsed / 1000)}
+        changeElapsedBy={(delta) => changeElapsedBy(delta * 1000)}
+      />
       <button style={{ width: "4ch" }} onClick={() => toggle()}>
         {state.playing ? "Stop" : "Play"}
       </button>
-      <button style={{ width: "5h" }} onClick={() => resetElapsed()}>
+      <button style={{ width: "5h" }} onClick={() => reset()}>
         Clear
       </button>
     </div>
