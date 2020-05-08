@@ -1,12 +1,12 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 
-import { useStopwatch } from "../../hooks/useStopwatch";
+import { useInterval } from "../../hooks/useInterval";
 import { useStoredState } from "../../hooks/useStoredState";
 import { useUrlId } from "../../hooks/useRoomId";
 
 import style from "./index.module.css";
 
-function Input({ time, setTime }) {
+function Input({ elapsed, changeElapsedBy }) {
   const ref = useRef();
 
   useEffect(() => {
@@ -16,25 +16,20 @@ function Input({ time, setTime }) {
   });
 
   const value =
-    (time > 3600
-      ? String(Math.floor(time / 3600)).padStart(2, "0") + ":"
+    (elapsed > 3600
+      ? String(Math.floor(elapsed / 3600)).padStart(2, "0") + ":"
       : "") +
-    String(Math.floor((time % 3600) / 60)).padStart(2, "0") +
+    String(Math.floor((elapsed % 3600) / 60)).padStart(2, "0") +
     ":" +
-    String(time % 60).padStart(2, "0");
-
-  // const handleChange = (e) => {
-  //   const time = e.target.value.split(":").map((n) => parseInt(n, 10));
-  //   setTime(time.pop() + time.pop() * 60 + (time.length ? time[0] * 3600 : 0));
-  // };
+    String(elapsed % 60).padStart(2, "0");
 
   const handleKeyDown = (e) => {
     if (e.key === "Escape") {
       e.target.blur();
     } else if (e.key === "ArrowUp") {
-      setTime(time + 60);
+      changeElapsedBy(60);
     } else if (e.key === "ArrowDown") {
-      setTime(time > 60 ? time - 60 : 0);
+      changeElapsedBy(elapsed > 60 ? -60 : 0);
     } else {
       return;
     }
@@ -59,10 +54,35 @@ function Input({ time, setTime }) {
   );
 }
 
+const initialState = {
+  playing: false,
+  elapsed: 0,
+};
+
 export default function Stopwatch() {
   const stopwatchId = useUrlId();
-  const [time, setTime] = useStoredState(stopwatchId, 0);
-  const [counting, toggle] = useStopwatch(() => setTime((t) => t + 1));
+  const [state, setState] = useStoredState(stopwatchId, initialState);
+
+  const changeElapsedBy = (delta) => {
+    setState((state) => ({ ...state, elapsed: state.elapsed + delta }));
+  };
+
+  const resetElapsed = () => {
+    setState((state) => ({ ...state, elapsed: 0 }));
+  };
+
+  const toggle = useCallback(() => {
+    setState((state) => ({
+      ...state,
+      playing: !state.playing,
+    }));
+  }, [setState]);
+
+  useInterval(() => {
+    if (state.playing) {
+      changeElapsedBy(1);
+    }
+  }, 1000);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -80,11 +100,11 @@ export default function Stopwatch() {
 
   return (
     <div className={style.stopwatch}>
-      <Input time={time} setTime={setTime} />
+      <Input elapsed={state.elapsed} changeElapsedBy={changeElapsedBy} />
       <button style={{ width: "4ch" }} onClick={() => toggle()}>
-        {counting ? "Stop" : "Play"}
+        {state.playing ? "Stop" : "Play"}
       </button>
-      <button style={{ width: "5h" }} onClick={() => setTime(0)}>
+      <button style={{ width: "5h" }} onClick={() => resetElapsed()}>
         Clear
       </button>
     </div>
