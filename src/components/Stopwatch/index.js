@@ -23,20 +23,6 @@ function Input({ elapsed, changeElapsedBy }) {
     ":" +
     String(elapsed % 60).padStart(2, "0");
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      e.target.blur();
-    } else if (e.key === "ArrowUp") {
-      changeElapsedBy(60);
-    } else if (e.key === "ArrowDown") {
-      changeElapsedBy(elapsed > 60 ? -60 : -elapsed);
-    } else {
-      return;
-    }
-
-    e.preventDefault();
-  };
-
   const handleFocus = (e) => {
     e.target.setSelectionRange(0, e.target.value.length);
   };
@@ -47,7 +33,6 @@ function Input({ elapsed, changeElapsedBy }) {
       type="text"
       value={value}
       onFocus={handleFocus}
-      onKeyDown={handleKeyDown}
       readOnly={true}
       style={{ width: `${value.length}ch` }}
     />
@@ -71,12 +56,15 @@ export default function Stopwatch() {
     );
   }, [state, setElapsed]);
 
-  const changeElapsedBy = (delta) => {
-    setState((state) => ({
-      ...state,
-      elapsed: state.elapsed + delta,
-    }));
-  };
+  const changeElapsedBy = useCallback(
+    (delta) => {
+      setState((state) => ({
+        ...state,
+        elapsed: state.elapsed + delta,
+      }));
+    },
+    [setState]
+  );
 
   const reset = () => {
     setState((state) => ({
@@ -104,26 +92,31 @@ export default function Stopwatch() {
     updateElapsed();
   }, [state, updateElapsed]);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback(
+    (e) => {
       if (e.key === " ") {
         toggle();
+      } else if (e.key === "ArrowUp") {
+        changeElapsedBy(60000);
+      } else if (e.key === "ArrowDown") {
+        changeElapsedBy(elapsed > 60000 ? -60000 : -elapsed);
       } else {
         return;
       }
 
       e.preventDefault();
-    };
+    },
+    [elapsed, toggle, changeElapsedBy]
+  );
+
+  useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [toggle]);
+  }, [handleKeyDown]);
 
   return (
     <div className={style.stopwatch}>
-      <Input
-        elapsed={Math.floor(elapsed / 1000)}
-        changeElapsedBy={(delta) => changeElapsedBy(delta * 1000)}
-      />
+      <Input elapsed={Math.floor(elapsed / 1000)} />
       <button style={{ width: "4ch" }} onClick={() => toggle()}>
         {state.playing ? "Stop" : "Play"}
       </button>
