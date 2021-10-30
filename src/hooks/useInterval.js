@@ -1,11 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useLayoutEffect } from "react";
 
-export function useInterval(callback, interval) {
+export function useInterval(callback, delay) {
+  const callbackRef = useRef(callback);
+
+  useLayoutEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
   useEffect(() => {
-    const id = setInterval(callback, interval);
+    if (!delay) {
+      return;
+    }
+
+    const id = setInterval(() => callbackRef.current(), delay);
 
     return () => {
       clearInterval(id);
     };
-  }, [callback, interval]);
+  }, [delay]);
 }
