@@ -3,9 +3,9 @@
 > https://stopwatch.crz.li
 
 - Clean, responsive and minimalist design, fit for embedding or full-screen displays.
-- Local-stored, persistent state based on the URL. If you close and reopen the tab the stopwatch is still running.
-- Editable and keyboard accessible. Try the `↑`, `↓` and `space bar`.
-- Works great with 📔[Notion](https://notion.so).
+- Local-stored, persistent state -- if you close and reopen the same URL the stopwatch is still running.
+- Keyboard accessible: `↑`, `↓` for editing, `space bar` for play/pause and `backspace` for clear.
+- Works great embedded in 📔[Notion](https://notion.so).
 
 ![A screenshot of the application embedded in Notion.](screenshot.png?123)
 

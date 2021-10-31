@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import "resetize";
-import "./style/global.css";
+import App from "src/components/App";
 
-import App from "./components/App";
+import "resetize";
+import "src/style/global.css";
 
 ReactDOM.render(
   <React.StrictMode children={<App />} />,

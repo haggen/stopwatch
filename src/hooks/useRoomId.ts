@@ -17,7 +17,7 @@ export function useUrlId(root = "/") {
       : window.location.pathname.substring(root.length);
 
   useEffect(() => {
-    window.history.replaceState({}, null, root + roomId);
+    window.history.replaceState({}, "", root + roomId);
   }, [root, roomId]);
 
   return roomId;

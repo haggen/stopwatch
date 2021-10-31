@@ -1,17 +1,24 @@
 .stopwatch {
-  display: grid;
-  grid-auto-flow: column;
-  gap: 0.75rem;
+  align-items: center;
+  display: flex;
+  gap: 0.75em;
 }
 
-.stopwatch input {
+.display {
   font-size: 3em;
   font-family: "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace",
     "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace;
-  text-align: right;
-  width: 5.25em;
 }
 
-.stopwatch button {
+.controls {
+  align-items: center;
+  display: flex;
+  gap: 0.375em;
+}
+
+.controls button {
+  cursor: pointer;
   font-weight: bolder;
+  transition: color 0.25s ease-in-out;
+  border-radius: 0.125em;
 }
