@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { createReducer, useKey, useInterval } from "react-use";
+import { createReducer, useKey, useInterval, useFavicon } from "react-use";
 import { nanoid } from "nanoid";
 
 import { Button } from "src/components/Button";
+import PlayingIcon from "src/media/playing.svg";
+import PausedIcon from "src/media/paused.svg";
 
 import classes from "./style.module.css";
 
@@ -140,6 +142,8 @@ export const Stopwatch = () => {
   useInterval(() => {
     dispatch({ type: "tick" });
   }, 500);
+
+  useFavicon(playing ? PlayingIcon : PausedIcon);
 
   const display =
     (elapsed >= Hour ? formatTimeUnit(elapsed / Hour) + ":" : "") +
