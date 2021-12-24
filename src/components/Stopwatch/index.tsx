@@ -1,142 +1,159 @@
-import {
-  useRef,
-  useEffect,
-  useCallback,
-  FocusEvent,
-  ComponentPropsWithoutRef,
-} from "react";
+import { useEffect } from "react";
+import { createReducer, useKey, useInterval } from "react-use";
+import { nanoid } from "nanoid";
 
-import { useInterval } from "src/hooks/useInterval";
-import { useStoredState } from "src/hooks/useStoredState";
-import { useUrlId } from "src/hooks/useRoomId";
+import { Button } from "src/components/Button";
 
-import style from "./index.module.css";
+import classes from "./style.module.css";
 
-const S = 1000;
-const M = 60 * S;
-const H = 60 * M;
+type Action =
+  | { type: "load"; id: string }
+  | { type: "tick" }
+  | { type: "increment"; amount: number }
+  | { type: "decrement"; amount: number }
+  | { type: "clear" }
+  | { type: "toggle" };
 
-function formatTimeUnit(value: number) {
+const Second = 1000;
+const Minute = 60 * Second;
+const Hour = 60 * Minute;
+
+const formatTimeUnit = (value: number) => {
   return String(Math.floor(value)).padStart(2, "0");
-}
-
-type ButtonProps = ComponentPropsWithoutRef<"button"> & {
-  children: string;
 };
 
-function Button({ children, style, ...props }: ButtonProps) {
-  return (
-    <button style={{ ...style, width: `${children.length}ch` }} {...props}>
-      {children}
-    </button>
-  );
-}
-
 const initialState = {
+  id: "",
   playing: false,
-  updated: 0,
+  ticked: 0,
   elapsed: 0,
 };
 
-function useStopwatchState() {
-  const stopwatchId = useUrlId();
-  const [state, setState] = useStoredState(stopwatchId, initialState);
+const reducer = (state: typeof initialState, action: Action) => {
+  const now = Date.now();
 
-  useEffect(() => {
-    update();
-  }, []);
+  switch (action.type) {
+    case "load":
+      const item = localStorage.getItem(action.id);
+      if (item) {
+        const state = JSON.parse(item);
 
-  const update = useCallback(() => {
-    setState((state) => {
-      const updated = Date.now();
+        // Migration due to changed format.
+        if ("changed" in state) {
+          state.id = action.id;
+          state.ticked = state.changed;
+          delete state.changed;
+        }
 
+        return state;
+      }
+      return { ...initialState, id: action.id };
+    case "tick":
       if (!state.playing) {
         return state;
       }
-
       return {
         ...state,
-        updated,
-        elapsed: state.elapsed + (updated - state.updated),
+        ticked: now,
+        elapsed: state.elapsed + (now - state.ticked),
       };
-    });
-  }, [setState]);
+    case "increment":
+      return {
+        ...state,
+        elapsed: state.elapsed + action.amount,
+      };
+    case "decrement":
+      return {
+        ...state,
+        elapsed:
+          state.elapsed -
+          (state.elapsed > action.amount ? action.amount : state.elapsed),
+      };
+    case "clear":
+      return {
+        ...state,
+        playing: state.playing,
+        ticked: now,
+        elapsed: 0,
+      };
+    case "toggle":
+      return {
+        ...state,
+        playing: !state.playing,
+        ticked: now,
+      };
+  }
+};
 
-  const increment = useCallback(() => {
-    setState((state) => ({
-      ...state,
-      elapsed: state.elapsed + M,
-    }));
-  }, [setState]);
+const useReducer = createReducer<Action, typeof initialState>(
+  (store) => (next) => (action) => {
+    next(action);
 
-  const decrement = useCallback(() => {
-    setState((state) => ({
-      ...state,
-      elapsed: state.elapsed - (state.elapsed > M ? M : state.elapsed),
-    }));
-  }, [setState]);
-
-  const clear = useCallback(() => {
-    setState((state) => ({
-      playing: state.playing,
-      updated: Date.now(),
-      elapsed: 0,
-    }));
-  }, [setState]);
-
-  const toggle = useCallback(() => {
-    setState((state) => ({
-      ...state,
-      playing: !state.playing,
-      updated: Date.now(),
-    }));
-  }, [setState]);
-
-  return { ...state, increment, decrement, update, toggle, clear };
-}
-
-export default function Stopwatch() {
-  const { playing, elapsed, increment, decrement, update, toggle, clear } =
-    useStopwatchState();
-
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === " ") {
-      toggle();
-    } else if (e.key === "ArrowUp") {
-      increment();
-    } else if (e.key === "ArrowDown") {
-      decrement();
-    } else if (e.key === "Backspace") {
-      clear();
-    } else {
-      return;
+    const state = store.getState();
+    if (state.id) {
+      localStorage.setItem(state.id, JSON.stringify(state));
     }
+  }
+);
 
-    e.preventDefault();
-  }, []);
-
-  useInterval(() => {
-    update();
-  }, 1000);
+export const Stopwatch = () => {
+  const [{ id, playing, elapsed }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+    if (!id) {
+      const { pathname } = window.location;
+      const id = pathname === "/" ? nanoid(5) : pathname.substring(1);
+
+      dispatch({ type: "load", id });
+
+      window.history.replaceState({}, "", "/" + id);
+    }
+  }, [id]);
+
+  const onToggle = () => {
+    dispatch({ type: "toggle" });
+  };
+
+  const onClear = () => {
+    dispatch({ type: "clear" });
+  };
+
+  useKey(" ", () => {
+    dispatch({ type: "toggle" });
+  });
+
+  useKey("Backspace", () => {
+    dispatch({ type: "clear" });
+  });
+
+  useKey("ArrowDown", () => {
+    dispatch({ type: "decrement", amount: Minute });
+  });
+
+  useKey("ArrowUp", () => {
+    dispatch({ type: "increment", amount: Minute });
+  });
+
+  useInterval(() => {
+    dispatch({ type: "tick" });
+  }, 500);
 
   const display =
-    (elapsed > H ? formatTimeUnit(elapsed / H) + ":" : "") +
-    formatTimeUnit((elapsed % H) / M) +
+    (elapsed >= Hour ? formatTimeUnit(elapsed / Hour) + ":" : "") +
+    formatTimeUnit((elapsed % Hour) / Minute) +
     ":" +
-    formatTimeUnit((elapsed % M) / S);
+    formatTimeUnit((elapsed % Minute) / Second);
 
   return (
-    <div className={style.stopwatch}>
-      <Button className={style.display}>{display}</Button>
-      <div className={style.controls}>
-        <Button onClick={() => toggle()}>{playing ? "Stop" : "Play"}</Button>
-        <Button onClick={() => clear()}>Clear</Button>
+    <div className={classes.stopwatch}>
+      <Button className={classes.display}>{display}</Button>
+      <div className={classes.controls}>
+        <Button onClick={onToggle}>{playing ? "Stop" : "Play"}</Button>
+        <Button onClick={onClear}>Clear</Button>
       </div>
     </div>
   );
-}
+};

@@ -1,12 +1,13 @@
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 
 import App from "src/components/App";
 
-import "resetize";
 import "src/style/global.css";
 
 ReactDOM.render(
-  <React.StrictMode children={<App />} />,
+  <StrictMode>
+    <App />
+  </StrictMode>,
   document.getElementById("root")
 );
