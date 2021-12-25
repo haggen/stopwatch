@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createReducer, useKey, useInterval, useFavicon } from "react-use";
+import { createReducer, useKey, useInterval, useMedia } from "react-use";
 import { nanoid } from "nanoid";
 
 import { Button } from "src/components/Button";
@@ -7,6 +7,7 @@ import PlayingIcon from "src/media/playing.svg";
 import PausedIcon from "src/media/paused.svg";
 
 import classes from "./style.module.css";
+import { useIcon } from "src/hooks/useIcon";
 
 type Action =
   | { type: "load"; id: string }
@@ -115,6 +116,13 @@ export const Stopwatch = () => {
     }
   }, [id]);
 
+  const prefersDarkScheme = useMedia("(prefers-color-scheme: dark)");
+
+  useIcon({
+    href: playing ? PlayingIcon : PausedIcon,
+    color: prefersDarkScheme ? "#ebebeb" : "#37352f",
+  });
+
   const onToggle = () => {
     dispatch({ type: "toggle" });
   };
@@ -142,8 +150,6 @@ export const Stopwatch = () => {
   useInterval(() => {
     dispatch({ type: "tick" });
   }, 500);
-
-  useFavicon(playing ? PlayingIcon : PausedIcon);
 
   const display =
     (elapsed >= Hour ? formatTimeUnit(elapsed / Hour) + ":" : "") +

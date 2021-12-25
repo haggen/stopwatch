@@ -5,12 +5,10 @@
 }
 
 .display {
-  cursor: pointer;
   font-family: "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace",
     "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace;
-  font-size: 3em;
+  font-size: 3.5em;
   font-weight: normal;
-  opacity: 1;
 }
 
 .controls {
