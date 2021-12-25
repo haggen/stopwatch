@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 type Options = {
   href: string;
@@ -13,17 +13,12 @@ const getLink = (rel: string) => {
   return link;
 };
 
-const useLinkRef = (rel: string) => {
-  return useRef(getLink(rel));
-};
-
 /**
  * Update favicon href.
  */
 export const useIcon = ({ href }: Options) => {
-  const iconRef = useLinkRef("icon");
-
   useEffect(() => {
-    iconRef.current.href = href;
-  }, [href, iconRef]);
+    const link = getLink("icon");
+    link.href = href;
+  }, [href]);
 };
