@@ -1,33 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type Options = {
   href: string;
-  color: string;
 };
 
-const setFavicon = (href: string) => {
-  const link = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
-  if (link) {
-    link.href = href;
-  }
+const getLink = (rel: string) => {
+  const link =
+    document.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`) ??
+    document.createElement("link");
+  link.rel = rel;
+  document.head.appendChild(link);
+  return link;
 };
 
-const setMaskIcon = (href: string, color: string) => {
-  const link = document.querySelector<HTMLLinkElement>(
-    "link[rel*='mask-icon']"
-  );
-  if (link) {
-    link.href = href;
-    link.setAttribute("color", color);
-  }
+const useLinkRef = (rel: string) => {
+  return useRef(getLink(rel));
 };
 
 /**
- * Update favicon and mask-icon for Safari.
+ * Update favicon href.
  */
-export const useIcon = ({ href, color }: Options) => {
+export const useIcon = ({ href }: Options) => {
+  const iconRef = useLinkRef("icon");
+
   useEffect(() => {
-    setFavicon(href);
-    setMaskIcon(href, color);
-  }, [href, color]);
+    iconRef.current.href = href;
+  }, [href, iconRef]);
 };

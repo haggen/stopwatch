@@ -116,11 +116,8 @@ export const Stopwatch = () => {
     }
   }, [id]);
 
-  const prefersDarkScheme = useMedia("(prefers-color-scheme: dark)");
-
   useIcon({
     href: playing ? PlayingIcon : PausedIcon,
-    color: prefersDarkScheme ? "#ebebeb" : "#37352f",
   });
 
   const onToggle = () => {
