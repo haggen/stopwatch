@@ -1,13 +1,22 @@
 import { useEffect } from "react";
-import { createReducer, useKey, useInterval, useMedia } from "react-use";
+import { createReducer, useKey } from "react-use";
 import { nanoid } from "nanoid";
 
-import { Button } from "src/components/Button";
+import { Second, Minute } from "src/lib/time";
+import { useIcon } from "src/hooks/useIcon";
+
 import PlayingIcon from "src/media/playing.svg";
 import PausedIcon from "src/media/paused.svg";
 
 import classes from "./style.module.css";
-import { useIcon } from "src/hooks/useIcon";
+import { Display } from "../Display";
+import { Controls } from "../Controls";
+
+type State = {
+  id: string;
+  started: number | false;
+  elapsed: number;
+};
 
 type Action =
   | { type: "load"; id: string }
@@ -15,24 +24,17 @@ type Action =
   | { type: "increment"; amount: number }
   | { type: "decrement"; amount: number }
   | { type: "clear" }
+  | { type: "play" }
+  | { type: "stop" }
   | { type: "toggle" };
-
-const Second = 1000;
-const Minute = 60 * Second;
-const Hour = 60 * Minute;
-
-const formatTimeUnit = (value: number) => {
-  return String(Math.floor(value)).padStart(2, "0");
-};
 
 const initialState = {
   id: "",
-  playing: false,
-  ticked: 0,
+  started: 0,
   elapsed: 0,
 };
 
-const reducer = (state: typeof initialState, action: Action) => {
+const reducer = (state: State, action: Action): State => {
   const now = Date.now();
 
   switch (action.type) {
@@ -47,19 +49,16 @@ const reducer = (state: typeof initialState, action: Action) => {
           state.ticked = state.changed;
           delete state.changed;
         }
+        // Migration due to changed format.
+        if ("ticked" in state) {
+          state.started = state.ticked;
+          delete state.playing;
+          delete state.ticked;
+        }
 
         return state;
       }
       return { ...initialState, id: action.id };
-    case "tick":
-      if (!state.playing) {
-        return state;
-      }
-      return {
-        ...state,
-        ticked: now,
-        elapsed: state.elapsed + (now - state.ticked),
-      };
     case "increment":
       return {
         ...state,
@@ -75,21 +74,30 @@ const reducer = (state: typeof initialState, action: Action) => {
     case "clear":
       return {
         ...state,
-        playing: state.playing,
-        ticked: now,
         elapsed: 0,
       };
-    case "toggle":
+    case "play":
       return {
         ...state,
-        playing: !state.playing,
-        ticked: now,
-        elapsed: state.elapsed - (state.elapsed % Second), // Round down so we don't stop at a fraction of a second.
+        started: now,
       };
+    case "stop":
+      const elapsed = state.elapsed + now - (state.started || 0);
+      return {
+        ...state,
+        started: false,
+        elapsed: elapsed - (elapsed % Second), // Round down so we don't stop at a fraction of a second.
+      };
+    case "toggle":
+      return state.started
+        ? reducer(state, { type: "stop" })
+        : reducer(state, { type: "play" });
+    default:
+      return { ...initialState };
   }
 };
 
-const useReducer = createReducer<Action, typeof initialState>(
+const useReducer = createReducer<Action, State>(
   (store) => (next) => (action) => {
     next(action);
 
@@ -101,7 +109,7 @@ const useReducer = createReducer<Action, typeof initialState>(
 );
 
 export const Stopwatch = () => {
-  const [{ id, playing, elapsed }, dispatch] = useReducer(
+  const [{ id, started, elapsed }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -118,7 +126,7 @@ export const Stopwatch = () => {
   }, [id]);
 
   useIcon({
-    href: playing ? PlayingIcon : PausedIcon,
+    href: started ? PlayingIcon : PausedIcon,
   });
 
   const onToggle = () => {
@@ -145,23 +153,10 @@ export const Stopwatch = () => {
     dispatch({ type: "increment", amount: Minute });
   });
 
-  useInterval(() => {
-    dispatch({ type: "tick" });
-  }, 500);
-
-  const display =
-    (elapsed >= Hour ? formatTimeUnit(elapsed / Hour) + ":" : "") +
-    formatTimeUnit((elapsed % Hour) / Minute) +
-    ":" +
-    formatTimeUnit((elapsed % Minute) / Second);
-
   return (
     <div className={classes.stopwatch}>
-      <Button className={classes.display}>{display}</Button>
-      <div className={classes.controls}>
-        <Button onClick={onToggle}>{playing ? "Stop" : "Play"}</Button>
-        <Button onClick={onClear}>Clear</Button>
-      </div>
+      <Display started={started} elapsed={elapsed} />
+      <Controls started={started} onToggle={onToggle} onClear={onClear} />
     </div>
   );
 };
