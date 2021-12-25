@@ -5,8 +5,7 @@
 }
 
 .display {
-  font-family: "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace",
-    "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace;
+  font-family: var(--monospace);
   font-size: 3.5em;
   font-weight: normal;
 }

@@ -1,4 +1,6 @@
 .button {
+  cursor: default;
   font-weight: bolder;
+  text-align: center;
   transition: font-size 0.25s ease-in-out;
 }

@@ -11,7 +11,6 @@
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "hashids": "2.2.10",
-    "modern-normalize": "^1.1.0",
     "nanoid": "^3.1.30",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

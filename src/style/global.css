@@ -1,36 +1,24 @@
-@import "modern-normalize";
-
 * {
-  padding: 0;
-  margin: 0;
+  all: unset; /* Use initial spec values. */
+  display: revert; /* Revert to browser's default. */
 }
 
-html,
-body {
-  height: 100%;
+*,
+::before,
+::after {
+  box-sizing: border-box;
 }
 
 html {
+  --monospace: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
+    monospace;
+  --sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+  background-color: #fff;
   color: #37352f;
-  font-size: 3vw;
-}
-
-#root {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-}
-
-*:focus {
-  outline: 0;
-}
-
-button {
-  background-color: transparent;
-  border: 0;
-  color: inherit;
-  font: inherit;
+  font: normal 14px/1 var(--sans-serif);
+  font-size: max(12px, 3vw); /* Fluid font-size. */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,4 +26,20 @@ button {
     background-color: #2f3437;
     color: #ebebeb;
   }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+#root {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+*:focus {
+  outline: 0;
 }
