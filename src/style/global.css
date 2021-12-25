@@ -18,7 +18,7 @@ html {
   background-color: #fff;
   color: #37352f;
   font: normal 14px/1 var(--sans-serif);
-  font-size: max(12px, 3vw); /* Fluid font-size. */
+  font-size: max(18px, 2.5vw); /* Fluid font-size. */
 }
 
 @media (prefers-color-scheme: dark) {
