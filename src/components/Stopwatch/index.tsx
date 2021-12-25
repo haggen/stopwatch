@@ -75,7 +75,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         elapsed: 0,
-        started: now,
+        started: state.started && now,
       };
     case "play":
       return {
