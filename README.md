@@ -20,4 +20,4 @@ npm start
 
 ## Legal
 
-The MIT License (MIT) © 2020 Arthur Corenzan.
+Apache-2.0 © 2020 Arthur Corenzan.
