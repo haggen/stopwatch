@@ -84,6 +84,7 @@ const reducer = (state: typeof initialState, action: Action) => {
         ...state,
         playing: !state.playing,
         ticked: now,
+        elapsed: state.elapsed - (state.elapsed % Second), // Round down so we don't stop at a fraction of a second.
       };
   }
 };
