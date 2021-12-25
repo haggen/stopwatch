@@ -1,10 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
-  <style>    
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <style>
+    path {
+      fill: #2F3437;
+    }
     @media (prefers-color-scheme: dark) {
       path {
         fill: #ebebeb;
       }
     }
   </style>
-  <path fill="#2F3437" fill-rule="evenodd" d="M13.867 0C6.208 0 0 6.208 0 13.867v4.266C0 25.792 6.208 32 13.867 32h4.266C25.792 32 32 25.792 32 18.133v-4.266C32 6.208 25.792 0 18.133 0h-4.266zm.647 8.315c-.672-.672-1.82-.196-1.82.754v13.706c0 .95 1.148 1.426 1.82.754l6.853-6.853a1.067 1.067 0 000-1.508l-6.853-6.853z" clip-rule="evenodd" />
+  <path fill-rule="evenodd" d="M13.867 0C6.208 0 0 6.208 0 13.867v4.266C0 25.792 6.208 32 13.867 32h4.266C25.792 32 32 25.792 32 18.133v-4.266C32 6.208 25.792 0 18.133 0h-4.266zm.647 8.315c-.672-.672-1.82-.196-1.82.754v13.706c0 .95 1.148 1.426 1.82.754l6.853-6.853a1.067 1.067 0 000-1.508l-6.853-6.853z" clip-rule="evenodd" />
 </svg>
