@@ -10,21 +10,26 @@
 }
 
 html {
-  --monospace: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
-    monospace;
-  --sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --monospace: ui-monospace, monospace;
+  --sans-serif: system-ui;
+  --background: #fff;
+  --foreground: #37352f;
 
-  background-color: #fff;
-  color: #37352f;
+  background-color: var(--background);
+  color: var(--foreground);
   font: normal 14px/1 var(--sans-serif);
   font-size: max(18px, 2.5vw); /* Fluid font-size. */
 }
 
+html[data-color-scheme="dark"] {
+  --background: #2f3437;
+  --foreground: #ebebeb;
+}
+
 @media (prefers-color-scheme: dark) {
-  html {
-    background-color: #2f3437;
-    color: #ebebeb;
+  html:not([data-color-scheme="light"]) {
+    --background: #2f3437;
+    --foreground: #ebebeb;
   }
 }
 

@@ -1,0 +1,18 @@
+.notification {
+  animation: fade-out 0.5s ease-in-out forwards 1.5s;
+  font-size: 0.75em;
+  font-weight: lighter;
+  inset: 0 0 auto auto;
+  padding: 0.75em;
+  position: fixed;
+  text-transform: capitalize;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
