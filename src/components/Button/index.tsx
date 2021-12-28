@@ -1,4 +1,4 @@
-import { ComponentPropsWithRef } from "react";
+import { ComponentPropsWithRef, KeyboardEvent } from "react";
 
 import classes from "./style.module.css";
 
@@ -12,11 +12,19 @@ export const Button = ({
   className,
   ...props
 }: ButtonProps) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === " ") {
+      e.stopPropagation();
+    }
+    props.onKeyDown?.(e);
+  };
+
   return (
     <button
       className={`${classes.button} ${className ?? ""}`}
       style={{ ...style, width: `${children.length}ch` }}
       {...props}
+      onKeyDown={onKeyDown}
     >
       {children}
     </button>
