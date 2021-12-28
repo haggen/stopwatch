@@ -2,5 +2,11 @@
   cursor: default;
   font-weight: bolder;
   text-align: center;
-  transition: font-size 0.25s ease-in-out;
+  transition: font-size 0.25s linear, opacity 0.125s ease-in-out;
+}
+
+.button.active,
+.button:active {
+  transition: none;
+  opacity: 0.25;
 }

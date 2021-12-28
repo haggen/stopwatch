@@ -44,14 +44,6 @@ export const Stopwatch = () => {
     dispatch({ type: "toggleColorScheme" });
   });
 
-  useKey(" ", () => {
-    dispatch({ type: "toggle" });
-  });
-
-  useKey("Backspace", () => {
-    dispatch({ type: "clear" });
-  });
-
   useKey("ArrowDown", (e) => {
     dispatch({ type: "decrement", amount: e.shiftKey ? Hour : Minute });
   });

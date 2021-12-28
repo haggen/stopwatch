@@ -10,29 +10,30 @@ type Props = {
   started: number | false;
 };
 
-const formatNumber = (value: number) => {
+const format = (value: number) => {
   return String(Math.floor(value)).padStart(2, "0");
 };
 
-const formatDisplay = (elapsed: number) => {
-  return (
-    (elapsed >= Hour ? formatNumber(elapsed / Hour) + ":" : "") +
-    formatNumber((elapsed % Hour) / Minute) +
-    ":" +
-    formatNumber((elapsed % Minute) / Second)
-  );
-};
-
-const getTotal = (elapsed: number, started: number | false) => {
-  const now = Date.now();
-  return elapsed + now - (started || now);
-};
-
 export const Display = ({ elapsed, started }: Props) => {
-  const total = getTotal(elapsed, started);
+  const now = Date.now();
+  const total = elapsed + now - (started || now);
+
+  const display =
+    (total >= Hour ? format(total / Hour) + ":" : "") +
+    format((total % Hour) / Minute) +
+    ":" +
+    format((total % Minute) / Second);
 
   // @todo https://github.com/streamich/react-use/issues/779
   useRaf(2147483646);
 
-  return <Button className={classes.display}>{formatDisplay(total)}</Button>;
+  const onActivate = () => {
+    navigator.clipboard.writeText(display);
+  };
+
+  return (
+    <Button className={classes.display} onActivate={onActivate} shortcut="c">
+      {display}
+    </Button>
+  );
 };

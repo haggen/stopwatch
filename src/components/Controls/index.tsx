@@ -11,8 +11,12 @@ type Props = {
 export const Controls = ({ started, onToggle, onClear }: Props) => {
   return (
     <div className={classes.controls}>
-      <Button onClick={onToggle}>{started ? "Stop" : "Play"}</Button>
-      <Button onClick={onClear}>Clear</Button>
+      <Button onActivate={onToggle} shortcut=" ">
+        {started ? "Stop" : "Play"}
+      </Button>
+      <Button onActivate={onClear} shortcut="Backspace">
+        Clear
+      </Button>
     </div>
   );
 };
