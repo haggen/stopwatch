@@ -52,12 +52,12 @@ export const Stopwatch = () => {
     dispatch({ type: "clear" });
   });
 
-  useKey("ArrowDown", () => {
-    dispatch({ type: "decrement", amount: Minute });
+  useKey("ArrowDown", (e) => {
+    dispatch({ type: "decrement", amount: e.shiftKey ? Hour : Minute });
   });
 
-  useKey("ArrowUp", () => {
-    dispatch({ type: "increment", amount: Minute });
+  useKey("ArrowUp", (e) => {
+    dispatch({ type: "increment", amount: e.shiftKey ? Hour : Minute });
   });
 
   return (
