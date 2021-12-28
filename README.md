@@ -2,10 +2,16 @@
 
 > https://stopwatch.crz.li
 
-- Clean, responsive and minimalist design, fit for embedding or full-screen displays.
-- Local-stored, persistent state -- if you close and reopen the same URL it'll still be running.
-- Keyboard accessible: `↑`, `↓` for editing, `space bar` to play/pause and `backspace` to clear.
-- Works great embedded in 📔[Notion](https://notion.so).
+- Responsive and minimalist design, fit for embedding or full-screen display.
+  - Works specially great in 📔[Notion](https://notion.so).
+- Locally stored, persistent state — reopen the same URL in the same browser and it'll still be running.
+- Keyboard accessible:
+  - `C` to copy to clipboard.
+  - `Space bar` to play/pause.
+  - `Backspace` to clear.
+  - `↑` or `Shift+↑` to increment.
+  - `↓` or `Shift+↓` to decrement.
+  - `L` to toggle color scheme.
 
 ![A screenshot of Stopwatch](screenshot.webp)
 
