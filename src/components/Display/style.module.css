@@ -1,5 +1,11 @@
 .display {
   font-family: var(--monospace);
-  font-size: 3.5em;
+  font-size: 2.5em;
   font-weight: normal;
+}
+
+@media (width >= 500px) {
+  .display {
+    font-size: 3.5em;
+  }
 }

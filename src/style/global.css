@@ -17,8 +17,8 @@ html {
 
   background-color: var(--background);
   color: var(--foreground);
-  font: normal 14px/1 var(--sans-serif);
-  font-size: max(14px, 2.5vw); /* Fluid font-size. */
+  font: normal 12px/1 var(--sans-serif);
+  font-size: max(12px, 3vmax);
 }
 
 html[data-color-scheme="dark"] {
