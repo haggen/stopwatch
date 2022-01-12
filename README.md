@@ -2,6 +2,8 @@
 
 > https://stopwatch.crz.li
 
+![A screenshot of Stopwatch embedded in Notion.so](screenshot.webp)
+
 - Responsive and minimalist design, fit for embedding or full-screen display.
   - Works specially great in 📔[Notion](https://notion.so).
 - Locally stored, persistent state — reopen the same URL in the same browser and it'll still be running.
@@ -12,8 +14,6 @@
   - `↑` or `Shift+↑` to increment.
   - `↓` or `Shift+↓` to decrement.
   - `L` to toggle color scheme.
-
-![A screenshot of Stopwatch](screenshot.webp)
 
 ## Development
 
